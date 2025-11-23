@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Autor {
     
+    private int id;
     private String ime;
     private String prezime;
     private int godinaRodjenja;
@@ -18,7 +19,18 @@ public class Autor {
         this.godinaRodjenja = godinaRodjenja;
         this.biografija = biografija;
     }
+    
+    public Autor(int id, String ime, String prezime, int godinaRodjenja, String biografija) {
+        this.id = id;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.godinaRodjenja = godinaRodjenja;
+        this.biografija = biografija;
+    }
 
+    public int getId() {
+        return id;
+    }
     public String getIme() {
         return ime;
     }
@@ -32,6 +44,9 @@ public class Autor {
         return biografija;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setIme(String ime) {
         this.ime = ime;
     }
