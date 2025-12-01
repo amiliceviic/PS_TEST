@@ -3,8 +3,10 @@ package controller;
 import baza.DBBroker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.Knjiga;
 import model.Autor;
+import model.User;
 import model.Zanr;
 
 public class Controller {
@@ -12,7 +14,16 @@ public class Controller {
     private DBBroker dbb;
     
     private List<Knjiga> listaKnjiga = new ArrayList<>();
-    private List<Autor> listaAutora = new ArrayList<>();;
+    private List<Autor> listaAutora = new ArrayList<>();
+
+    public List<User> getListaUsera() {
+        return listaUsera;
+    }
+    public void setListaUsera(List<User> listaUsera) {
+        this.listaUsera = listaUsera;
+    }
+
+    private List<User> listaUsera = new ArrayList<>();
     
     private static Controller instance;
     
@@ -25,6 +36,14 @@ public class Controller {
 
     private Controller() {
         dbb = new DBBroker();
+        
+        User u1 = new User(1, "vanja", "vanja");
+        User u2 = new User(2, "milos", "milos");
+        User u3 = new User(3, "igor", "igor");
+        
+        listaUsera.add(u1);
+        listaUsera.add(u2);
+        listaUsera.add(u3);
         
         
 //        Autor autor1 = new Autor("Ivo", "Andric", 1892, "Biografija autora Ive Andrica...");
@@ -71,7 +90,8 @@ public class Controller {
     }
 
     public List<Knjiga> ucitajListuKnjigaIzBaze() {
-        return dbb.ucitajListuKnjigaIzBaze();
+        this.listaKnjiga = dbb.ucitajListuKnjigaIzBaze();
+        return listaKnjiga;
     }
 
     public List<Autor> ucitajListuAutoraIzBaze() {
@@ -80,6 +100,57 @@ public class Controller {
 
     public void azurirajKnjigu(Knjiga knjigaZaIzmenu) {
         dbb.azurirajKnjigu(knjigaZaIzmenu);
+    }
+
+    public boolean login1(String username, String password) {
+        for (User user : listaUsera) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean login2(String username, String password) {
+        return dbb.login(username, password);
+    }
+
+    public List<Knjiga> filtriraj(String autor, String naziv) {
+//        List<Knjiga> rezultat = new ArrayList<>();
+//        if(autor!=null && naziv == null) {
+//            for (Knjiga k: listaKnjiga) {
+//                String autorKnjige = k.getAutor().getIme() + " " + k.getAutor().getPrezime();
+//                if (autorKnjige.contains(autor)) {
+//                    rezultat.add(k);
+//                }
+//            }
+//        }
+//        if (autor == null && naziv != null) {
+//            for (Knjiga k: listaKnjiga) {
+//                if (k.getNaslov().contains(naziv)) {
+//                    rezultat.add(k);
+//                }
+//            }
+//        }
+//        if (autor != null && naziv != null) {
+//            for (Knjiga k: listaKnjiga) {
+//                String autorKnjige = k.getAutor().getIme() + " " + k.getAutor().getPrezime();
+//                if (autorKnjige.contains(autor) && k.getNaslov().contains(naziv)) {
+//                    rezultat.add(k);
+//                }
+//            }
+//        }
+        
+        List<Knjiga> rezultatCollections = new ArrayList<>();
+        
+        rezultatCollections = listaKnjiga.stream().filter(k->(naziv != null && k.getNaslov().contains(naziv)) &&
+                (autor != null && (k.getAutor().getIme() + " " + k.getAutor().getPrezime()).contains(autor))).collect(Collectors.toList());
+        
+        return rezultatCollections;
+    }
+
+    public List<Knjiga> filtriraj2(String autor, String naziv) {
+        return dbb.filtriraj(autor, naziv);
     }
     
 }

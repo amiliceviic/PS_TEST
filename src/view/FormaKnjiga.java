@@ -192,8 +192,20 @@ public class FormaKnjiga extends javax.swing.JDialog {
         // TODO add your handling code here:
         try {
             String naziv = txtNazivDialog.getText();
+            if (naziv==null || naziv.trim().isEmpty() || naziv.trim().length() < 3) {
+                JOptionPane.showMessageDialog(this, "Greska: Pogresan naziv", "Greska", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             String isbn = txtISBNDialog.getText();
+            if (isbn == null || isbn.trim().isEmpty() || isbn.trim().length() < 5) {
+                JOptionPane.showMessageDialog(this, "Greska: Pogresan isbn!", "Greska", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             int godinaIzdanja = Integer.parseInt(txtGodinaIzdanjaDialog.getText());
+            if (godinaIzdanja < 1800 || godinaIzdanja > 2025) {
+                JOptionPane.showMessageDialog(this, "Greska: Pogresno uneta godina", "Greska", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             Zanr zanr = Zanr.valueOf(cmbZanr.getSelectedItem().toString());
             Autor autor = (Autor) cmbAutor.getSelectedItem();
             Random rand = new Random();
